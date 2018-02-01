@@ -12,3 +12,4 @@ end;
 --select para verificar que se guardo 
 select * from Almacen;
 --
+--probar el procedimiento con netbeans
