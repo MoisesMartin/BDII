@@ -1,7 +1,18 @@
 
 create table Almacen(numero_almacen integer, ubicacion_almacen varchar2(40),constraint pk_na primary key(numero_almacen));
-drop table Almacen
-drop table cliente
+
+--select para verificar que se guardo 
+select * from Almacen;
+--
+create table cliente(numero_cliente integer,numero_almacen integer,nombre_cliente varchar2(30),constraint PK_N_C Primary Key(numero_cliente),constraint FK1_n_a Foreign Key(numero_almacen) References Almacen(numero_almacen));
+select * from cliente;
+
+create table vendedor(numero_vendedor integer,nombre_vendedor varchar2(80),area_ventas varchar2(80),constraint PK_Vendedor Primary Key(numero_vendedor));
+select * from vendedor;
+
+create table ventas(id_ventas integer,numero_cliente integer,numero_vendedor integer, monto_ventas float,constraint PK_Ventas Primary Key(id_ventas),constraint FK1_N_C Foreign Key(numero_cliente) References cliente(numero_cliente),constraint FK2_n_v Foreign Key(numero_vendedor) references vendedor(numero_vendedor));
+select * from ventas;
+
 --procedimiento almacenado
 create or replace procedure guardar_almacen(my_numero_almacen in integer, my_ubicacion_almacen in varchar2)
 as
@@ -16,19 +27,6 @@ begin
 insert into cliente values ();
 end;
 /
---select para verificar que se guardo 
-select * from Almacen;
---
-create table cliente(numero_cliente integer,numero_almacen integer,nombre_cliente varchar2(30),constraint PK_N_C Primary Key(numero_cliente),constraint FK1_n_a Foreign Key(numero_almacen) References Almacen(numero_almacen));
-select * from cliente;
-
-create table vendedor(numero_vendedor integer,nombre_vendedor varchar2(80),area_ventas varchar2(80),constraint PK_Vendedor Primary Key(numero_vendedor));
-select * from vendedor;
-
-create table ventas(id_ventas integer,numero_cliente integer,numero_vendedor integer, monto_ventas float,constraint PK_Ventas Primary Key(id_ventas),constraint FK1_N_C Foreign Key(numero_cliente) References cliente(numero_cliente),constraint FK2_n_v Foreign Key(numero_vendedor) references vendedor(numero_vendedor));
-select * from ventas;
-
-
 
 --Ejemplo de una tabla con PK artificial y su procedimiento almacenado 
 CREATE TABLE CALIFICACIONES(ID_CALIFICACION INTEGER, MATERIA VARCHAR2(80), VALOR FLOAT, CONSTRAINT PK_ID_CAL PRIMARY KEY(ID_CALIFICACION));
@@ -48,3 +46,12 @@ SELECT SEC_CALIFICACIONES.NEXTVAL INTO MY_ID_CALIFICACION FROM DUAL;  --EL MAS I
 INSERT INTO CALIFICACIONES VALUES(MY_ID_CALIFICACION, MY_MATERIA,MY_VALOR);
 END;
 /
+--probar el procedimiento
+DECLARE 
+VALOR INTEGER;
+BEGIN
+GUARDAR_CALIFICACIONES(VALOR,'IA',8);
+END;
+/
+--VERIFICAMOS 
+SELECT * FROM CALIFICACIONES;
