@@ -1,5 +1,5 @@
 
-create table Almacen(numero_almacen integer, ubicacion_almacen varchar2(40),constraint pk_na primary key(numero_almacen));
+ccreate table Almacen(numero_almacen integer, ubicacion_almacen varchar2(40),constraint pk_na primary key(numero_almacen));
 
 --select para verificar que se guardo 
 select * from Almacen;
@@ -50,8 +50,22 @@ END;
 DECLARE 
 VALOR INTEGER;
 BEGIN
-GUARDAR_CALIFICACIONES(VALOR,'IA',8);
+GUARDAR_CALIFICACIONES(VALOR,'ARQUITECTURA DE SISTEMAS GERENCIALES PARA LA TOMA DE DESICIONES',10);
 END;
 /
 --VERIFICAMOS 
 SELECT * FROM CALIFICACIONES;
+
+DELETE FROM CALIFICACIONES WHERE ID_CALIFICACION=7;
+
+SELECT COUNT(*) FROM CALIFICACIONES; -- RELACIONADO A UN CURSOR IMPLICITO
+-- Ejemplo de cursor explicito  
+DECLARE
+CURSOR CUR_CALIF IS SELECT * FROM CALIFICACIONES;
+BEGIN
+  FOR REC IN CUR_CALIF LOOP                             --REC representa una fila de la BD
+    DBMS_OUTPUT.PUT_LINE('CALIFICACION: '||REC.VALOR|| ' MATERIA: '||REC.MATERIA);
+  END LOOP;
+END;
+/
+SET SERVEROUTPUT ON;
