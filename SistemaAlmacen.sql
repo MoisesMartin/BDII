@@ -1,5 +1,4 @@
-
-ccreate table Almacen(numero_almacen integer, ubicacion_almacen varchar2(40),constraint pk_na primary key(numero_almacen));
+create table Almacen(numero_almacen integer, ubicacion_almacen varchar2(40),constraint pk_na primary key(numero_almacen));
 
 --select para verificar que se guardo 
 select * from Almacen;
@@ -50,7 +49,7 @@ END;
 DECLARE 
 VALOR INTEGER;
 BEGIN
-GUARDAR_CALIFICACIONES(VALOR,'ARQUITECTURA DE SISTEMAS GERENCIALES PARA LA TOMA DE DESICIONES',10);
+GUARDAR_CALIFICACIONES(VALOR,'BD2',6);
 END;
 /
 --VERIFICAMOS 
@@ -69,3 +68,29 @@ BEGIN
 END;
 /
 SET SERVEROUTPUT ON;
+
+
+DECLARE 
+CURSOR CUR_2 IS SELECT * FROM CALIFICACIONES FOR UPDATE;
+BEGIN
+  FOR REG IN CUR_2 LOOP
+    IF REG.VALOR < 5 THEN
+      UPDATE CALIFICACIONES SET VALOR = 5 WHERE CURRENT OF CUR_2;
+     END IF;
+  END LOOP;
+END;
+/
+/*
+Ejercicio: Usando otro cursor, aplicar el update con la siguiente logica:
+Si la calificacion tiene .5, subirla al siguiente digito, si no dejarla en el mismo
+digito entero
+*/
+DECLARE
+CALIFICACION FLOAT;
+
+
+CURSOR CHECAR_CALIF IS SELECT * FROM CALIFICACIONES FOR UPDATE;
+BEGIN
+FOR CAL IN CHECAR_CALIF LOOP
+IF  MOD (CALIF.VALOR, 10,) > 0.5  THEN
+UPDATE FROM CALIFICACIONES SET VALOR = CALIF.VALOR 
