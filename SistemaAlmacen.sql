@@ -104,3 +104,47 @@ BEGIN
   END LOOP;
 END;
 /
+--Ejercicio
+create table Cliente(NoCliente integer NOT NULL Primary Key,
+                    Nombre varchar2(30),
+                    APaterno varchar2(20),
+                    AMaterno varchar2(20),
+                    SueldoBase float);
+                    
+create table Direccion(Id_Direccion integer NOT NULL Primary Key,
+                      codigoPostal integer,
+                      calle varchar2(40),
+                      Estado varchar2(20),
+                      Colonia varchar(40),
+                      NumCliente integer,
+                      constraint FK_Cliente Foreign Key(NumCliente) references Cliente(NoCliente));
+ 
+CREATE SEQUENCE SEC_DIRECCIONES
+START WITH 1
+INCREMENT BY 1
+NOMAXVALUE;                     
+                      
+create or replace procedure guardar_cliente(my_numero_cliente in integer,my_nombre_cliente in varchar2,my_APaterno in varchar2,my_AMaterno in varchar2, my_SueldoBase in float)
+as
+begin
+insert into Cliente values (my_numero_cliente, my_nombre_cliente,my_APaterno,my_AMaterno,my_SueldoBase);
+end;
+/
+
+create or replace procedure guardar_direccion(my_id_direccion OUT integer,my_CP in integer,my_calle in varchar2,my_estado in varchar2, my_colonia in varchar2, my_numero_cliente in integer)
+as
+begin
+SELECT SEC_DIRECCIONES.NEXTVAL INTO MY_ID_DIRECCION FROM DUAL;  
+insert into Direccion values (my_id_direccion, my_CP,my_calle,my_estado,my_colonia,my_numero_cliente);
+end;
+/
+SELECT * FROM Cliente;
+DECLARE 
+VALOR INTEGER;
+BEGIN
+guardor_direccion(VALOR,57120,'Calle 26','Mexico','Campestre',0001);
+END;
+/
+--VERIFICAMOS 
+SELECT * FROM CALIFICACIONES;
+
