@@ -148,3 +148,60 @@ END;
 --VERIFICAMOS 
 SELECT * FROM CALIFICACIONES;
 
+
+-----------------------TIPO EXAAMEN-----------------------------------------
+create table clientesito(id_cli integer primary key, nombre varchar2(40));
+create table direccionsita(id_dir integer primary key, id_cli integer, calle varchar(80),constraint fkl_id_cli foreign key(id_cli) references clientesito(id_cli));
+
+drop table clientesito;
+drop table direccionsita;
+
+drop sequence sec_cli;
+drop sequence sec_dir;
+
+create sequence sec_cli
+start with 1
+increment by 1
+nomaxvalue;
+
+create sequence sec_dir
+start with 1
+increment by 1
+nomaxvalue;
+
+create or replace procedure guardar_cli(mi_id OUT integer, mi_nombre IN varchar2)
+as 
+begin
+select sec_cli.nextval into mi_id from dual;
+insert into clientesito values(mi_id, mi_nombre);
+end;
+/
+
+create or replace procedure guardar_dir(mi_id OUT integer, mi_cli IN INTEGER, mi_calle IN varchar2)
+as 
+begin
+select sec_dir.nextval into mi_id from dual;
+insert into direccionsita values(mi_id, mi_cli, mi_calle);
+end;
+/
+create or replace procedure guarda_cli_dir(mi_cli OUT integer, mi_dir OUT integer, mi_nombre IN varchar2, mi_calle in varchar2) 
+as
+begin
+guardar_cli(mi_dir,mi_nombre);
+guardar_dir(mi_dir,mi_nombre,mi_calle);
+end;
+/
+--vamos a probar si esto funciona como Dios manda
+declare
+valor1 integer;
+valor2 integer;
+begin
+guarda_cli_dir(valor1, valor2, 'Juan', 'Calle 13');
+end;
+/
+
+select * from clientesito;
+select * from direccionsita;
+
+select clientesito.nombre, direccionsita.calle from clientesito, direccionsita where clientesito.id_cli=direccionsita.id_cli;
+
